@@ -4,6 +4,9 @@ const massive = require('massive');
 const cors = require('cors');
 require('dotenv').config();
 
+//controllers
+const productsController = require('./controllers/products_controller');
+
 //destructed variables from .env
 const {
      PORT,
@@ -11,6 +14,10 @@ const {
      } = process.env;
 
 const app = express();
+
+
+app.use( bodyParser.json() );
+app.use( cors() );
 
 massive(CONNECTION_STRING)
     .then((dbInstance) => {
@@ -20,9 +27,11 @@ massive(CONNECTION_STRING)
         console.error(err);
     });
 
-app.use( bodyParser.json() );
-app.use( cors() );
-
+app.get('/api/products', productsController.getAll);
+app.get('/api/product/:id', productsController.getOne);
+app.put('/api/product/:id', productsController.update);
+app.post('/api/products', productsController.create);
+app.delete('/api/products/:id', productsController.delete);
  
 app.listen(PORT, () => console.log(`server is running on:   ${PORT}`));
 
