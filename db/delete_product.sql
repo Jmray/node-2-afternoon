@@ -1,2 +1,2 @@
 DELETE FROM product
-WHERE product_id = ${product_id};
+WHERE product_id = $1;

@@ -17,10 +17,9 @@ const app = express();
 
 
 app.use( bodyParser.json() );
-app.use( cors() );
 
-massive(CONNECTION_STRING)
-    .then((dbInstance) => {
+
+massive(CONNECTION_STRING).then((dbInstance) => {
         app.set('db', dbInstance);
     })
     .catch((err) => {
@@ -28,8 +27,8 @@ massive(CONNECTION_STRING)
     });
 
 app.get('/api/products', productsController.getAll);
-app.get('/api/product/:id', productsController.getOne);
-app.put('/api/product/:id', productsController.update);
+app.get('/api/products/:id', productsController.getOne);
+app.put('/api/products/:id', productsController.update);
 app.post('/api/products', productsController.create);
 app.delete('/api/products/:id', productsController.delete);
  

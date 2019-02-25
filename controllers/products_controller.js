@@ -1,35 +1,36 @@
-module.export = {
+module.exports = {
     //create product function
     create: (req, res) => {
         let { name, description, price, image_url } = req.body;
 
-        req.app.db.create_product({name, description, price, image_url}).then(() => {
-            res.status(200).send(dbResponse)
+        req.app.get('db').create_product([name, description, price, image_url]).then(() => {
+            res.status(200).send('created')
 
         })
-        .catch((err) => {
-            res.status(500).send('error');
-            console.log(err);
+        .catch(() => {
+            res.status(500).send('failed');
         });
     },
     //Read product Function
-    GetOne: (req, res) => {
-        req.app.db.read_product().then((product) => {
+    getOne: (req, res) => {
+        let {id} = req.params;
+
+        req.app.get('db').read_product([id]).then((product) => {
             res.status(200).send(product);
         })
         .catch((err) => {
-            res.status(500).send('error');
+            res.status(500).send('Could not get product');
             console.log(err);
         });
     },
     //Read all funciton
     getAll: (req, res) => {
-        req.app.db.read_products().then((products) => {
+        req.app.get('db').read_products().then((products) => {
             res.status(200).send(products);
 
         })
         .catch((err) => {
-            res.status(500).send('error');
+            res.status(500).send('could not get products');
             console.log(err);
         });
 
@@ -37,22 +38,22 @@ module.export = {
     //Update product function
     update: (req, res) => {
         let {id} = req.params;
-        let {description} = req.body;
+        let {desc} = req.query;
 
-        req.app.db.update_product({product_id: id, description,}).then(() => {
-            res.status(200).send(dbResponse)
+        req.app.get('db').update_product([desc, id]).then(() => {
+            res.status(200).send('updated')
         })
-        .catch((err) => {
-            res.status(500).send('error');
-            console.log(err);
+        .catch(() => {
+            res.status(500).send('failed');
+            
         });
 
     },
     //delete product function
     delete: (req, res) => {
         let {id} = req.params;
-        req.app.db.delete_product({product_id: id,}).then(() => {
-            res.status(200).send(dbResponse)
+        req.app.get('db').delete_product([id]).then(() => {
+            res.status(200).send('failed')
         })
         .catch((err) => {
             res.status(500).send('error');
